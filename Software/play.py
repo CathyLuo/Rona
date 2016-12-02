@@ -2,11 +2,10 @@
 
 import os
 
-class play_audio:
-    def __init__(self, filepath, scale):
-        self.filepath = filepath
-        self.scale = scale
+def play_audio(music_type, music_region, scale):
 
-    def play(self):
-        filename = self.scale + '.wav'
-        os.system('play ' + filename)
+    filename = os.path.pardir + '/Resouse/' + music_type + '/' + scale + '.wav'
+    os.system('play ' + file_path)
+
+def record_sound(music_type, music_region, scale):
+    

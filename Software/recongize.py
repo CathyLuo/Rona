@@ -4,23 +4,25 @@ from pydub import AudioSegment
 from pylab import *
 
 class recog_voice(object)
-    def __init__(self, filename, filetype):
+    def __init__(self, filename, filetype, down_Thres = 10, up_Thres = 1000):
         self.filename = filename
         self.filetype = filetype
+        self.down_Thres = down_Thres
+        self.up_Thres = up_Thres
 
     def recognize(self):
-        down_Thres = 100
-        up_Thres = 3000
+
         sound = AudioSegment.from_file(self.filename, self.filetype)
         Sample_Freq = sound.frame_rate
         duration = int(sound.duration_seconds * 10)
-        freqlist = []
+        freq_list = []
         for i in range(0, duration):
             item = sound[i * 100 : (i + 1) * 100]
-            if item.max > 1.0:
+            if item.max> 1.0:
                 length = len(item.raw_data)
-                freq_range = up_Thres * length / Sample_Freq
-                freq_list = list(arange(down_Thres * length / Sample_Freq, freq_range) * Sample_Freq / length )
-                itemfft = list(abs(fft(list(item.raw_data))))[40: (len(freq_list) + 40)]
-                max_freq = freq_list[itemfft.index(max(itemfft))]
-                freq_list.append(max_freq)
+                solution = Sample_Freq / length
+                itemfft = list(abs(fft(list(item.raw_data))))[down_Thres, up_Thres]
+                max_db = max(itemfft)
+                freq_near = solution * (itemfft.index(max_db) + down_Thres)
+                freq_list.append(freq_near)
+        return freq_list

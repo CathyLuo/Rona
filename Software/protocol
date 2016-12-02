@@ -1,0 +1,54 @@
+********************From Arduino**********************
+
+key : event
+
+Scale:
+1 : do
+2 : re
+3 : mi
+4 : fa
+5 ：so
+6 : la
+7 : si
+8 : ^do
+
+Region:
+9 : high
+10 : mid
+11 : low
+
+Music type：
+12 : piano
+13 : guitar
+14 : xylophone
+
+Fuction:
+15 : teach
+16 : record
+0 : simple
+
+{
+    unsigned char head;
+    unsigned char scale;
+    unsigned char music_type;
+    unsigned char function;
+    unsigned char action;
+}
+
+**********************From Pi*************************
+
+{
+    unsigned char packet_type = 1;
+    unsigned char LED_Id;
+    unsigned char LED_action;
+}
+
+**********************for PI***************************
+{
+    unsigned char Fuction_mode;
+    unsigned char Music_type;
+}
+
+
+ *****************communication****************
+ If a key is pressed, the arduino report to Pi
