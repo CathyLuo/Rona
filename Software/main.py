@@ -5,6 +5,7 @@ import control
 import record
 import recognize
 from protocol import *
+from record import que
 
 port = '/dev/ttyUSB0'
 baud_rate = 9600
@@ -12,7 +13,7 @@ baud_rate = 9600
 ser = serial.Serial(port, baud_rate)
 
 teacher = teach.Teach()
-recongizer = recongize.Recongize()
+recongizer = recongize.Recongize(down_Thres = 10, up_Thres = 1000)
 
 while(True):
     pac = ser.read(5)
@@ -30,11 +31,15 @@ while(True):
     if function == 'record':
         signal = threading.Event()
         if action == 1:
-            record_t = threading.Thread(target = record.record_audio, argc = (signal))
             signal.set()
+            record_t = threading.Thread(target = record.record_audio, argc = (signal))
         else:
             signal.clear()
-            ###recongize
+            if not que.empty():
+                filename = que.get()
+                if not filename == None:
+                    freq_list = recongizer.recongize(filename, 'wav')
+                    ######classify
 
     if function == 'teach':
         pass

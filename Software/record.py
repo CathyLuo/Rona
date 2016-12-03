@@ -3,6 +3,8 @@ import pyaudio
 import wave
 import time
 
+que = Queue.Queue()
+
 def record_audio(signal):
     signal.wait()
     CHUNK = 1024
@@ -12,13 +14,13 @@ def record_audio(signal):
     MAX_RECORD_SECONDS = 15
 
     WAVE_OUTPUT_FILENAME = time.strftime("%D_%H-%M-%S", time.localtime()) + '.wav'
-    ####may be wrong
+
     try:
         p = pyaudio.PyAudio()
     except Exception:
         print(Exception)
-        #### handler
-        pass
+        que.put(None)
+        return None
 
     stream = p.open(format = FORMAT,
                     channels = CHANNELS,
@@ -27,7 +29,22 @@ def record_audio(signal):
                     frame_per_buffer = CHUNK)
     frames = []
 
-    signal.wait(1)
+    while(signal.is_set()):
         data = stream.read(CHUNK)
         frames.append(data)
-    stream.stop_str
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframesraw(frames)
+    wf.close()
+
+    que.put(WAVE_OUTPUT_FILENAME)
+
+
+if __name__ == '__main__':

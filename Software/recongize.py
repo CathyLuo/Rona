@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 
+import os
 from pydub import AudioSegment
 from pylab import *
 
-class recog_voice(object)
-    def __init__(self, filename, filetype, down_Thres = 10, up_Thres = 1000):
-        self.filename = filename
-        self.filetype = filetype
+class Recongize(object)
+    def __init__(self, down_Thres = 10, up_Thres = 1000):
         self.down_Thres = down_Thres
         self.up_Thres = up_Thres
 
-    def recognize(self):
-
-        sound = AudioSegment.from_file(self.filename, self.filetype)
+    def recognize(self, filename, filetype):
+        filedir = os.path.abspath(__file__) + '/' + filename
+        sound = AudioSegment.from_file(filename, filetype)
         Sample_Freq = sound.frame_rate
         duration = int(sound.duration_seconds * 10)
         freq_list = []
@@ -26,3 +25,10 @@ class recog_voice(object)
                 freq_near = solution * (itemfft.index(max_db) + down_Thres)
                 freq_list.append(freq_near)
         return freq_list
+
+    def classify(self, freq_list):
+        pass
+        #############
+
+if __name__ == '__main__':
+    pass
