@@ -7,6 +7,26 @@ import record
 import threading
 
 class control(object):
+    def analyze(pac, sys_status):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class control(object):
     def __init__(self, port = '/dev/ttyUSB0', baud_rate = 9600, time_out = 1):
         self.ser = serial.Serial(port, baud_rate, timeout = time_out)
 
@@ -24,8 +44,6 @@ class control(object):
         if function == 'teach':
             #############
         if function == 'record':
-            ############
-
         t = threading.Thread(target = play.play_audio, argc = (music_type, music_region, scale))
         t.setDaemon(True)
         t.start()

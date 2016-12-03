@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-
 import pyaudio
 import wave
 import time
 
-def record_audio():
+def record_audio(signal):
+    signal.wait()
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
@@ -25,5 +25,9 @@ def record_audio():
                     rate = RATE,
                     input = True,
                     frame_per_buffer = CHUNK)
+    frames = []
 
-    ######## record handler
+    signal.wait(1)
+        data = stream.read(CHUNK)
+        frames.append(data)
+    stream.stop_str
